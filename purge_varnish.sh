@@ -3,6 +3,7 @@
 
 preprod="10.0.0.1"
 prod="10.0.0.2 10.0.0.3"
+user="purger"
 
 echo "$(date "+%Y-%m-%d %H:%M") $@" >> /var/log/clear_cache
 
@@ -30,7 +31,7 @@ fi
 if [ $2 == "ALL" ] ; then
         for h in $VARNISH_HOST; do
                 echo "purge sur $h..."
-                ssh ifri_ssh@$h "echo \"ban req.url ~ /*\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
+                ssh $user@$h "echo \"ban req.url ~ /*\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
         done
         echo "Cache cleared"
 else
@@ -38,7 +39,7 @@ else
                 if [ ! -z $3 ] ; then
                         for h in $VARNISH_HOST; do
                                 echo "purge sur $h..."
-                                ssh ifri_ssh@$h "echo \"ban req.http.host ~ $3\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
+                                ssh $user@$h "echo \"ban req.http.host ~ $3\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
                         done
                         echo "$3 cleared"
                 else
@@ -49,7 +50,7 @@ else
                         if [ ! -z $3 ] ; then
                                 for h in $VARNISH_HOST; do
                                         echo "purge sur $h..."
-                                        ssh ifri_ssh@$h "echo \"ban req.url ~ $3\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
+                                        ssh $user@$h "echo \"ban req.url ~ $3\" | varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082"
                                 done
                                 echo "$3 cleared"
                         else
