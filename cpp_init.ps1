@@ -4,11 +4,11 @@ if ($args.Count -eq 0) {
     exit 1
 }
 
-$PROJECT_NAME = $args[0]
+$PROJECT = $args[0]
 
 # Création de la structure des dossiers
-Write-Host "Création de la structure pour le projet '$PROJECT_NAME'..."
-New-Item -ItemType Directory -Path "$PROJECT_NAME\src", "$PROJECT_NAME\include", "$PROJECT_NAME\build", "$PROJECT_NAME\bin", "$PROJECT_NAME\lib" | Out-Null
+Write-Host "Création de la structure pour le projet '$PROJECT'..."
+New-Item -ItemType Directory -Path "$PROJECT\src", "$PROJECT\include", "$PROJECT\build", "$PROJECT\bin", "$PROJECT\lib" | Out-Null
 
 # Fichier main.cpp par défaut
 Write-Host "Création d'un fichier main.cpp par défaut..."
@@ -16,19 +16,21 @@ Write-Host "Création d'un fichier main.cpp par défaut..."
 #include <iostream>
 
 int main() {
-    std::cout << "Hello, $PROJECT_NAME!" << std::endl;
+    std::cout << "Hello, $PROJECT!" << std::endl;
     return 0;
 }
-"@ | Set-Content -Path "$PROJECT_NAME\src\main.cpp"
+"@ | Set-Content -Path "$PROJECT\src\main.cpp"
 
 # Création du fichier CMakeLists.txt
 Write-Host "Création du fichier CMakeLists.txt..."
-@'
+
+# Utilisation de guillemets simples pour ne pas interpréter les variables
+$CMakeContent = @'
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(${PROJECT_NAME})
+project(${PROJECT})
 
 # header
 include_directories(include)
@@ -47,13 +49,18 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../bin"
 )
-'@ | Out-File -Encoding UTF8 -FilePath "$PROJECT_NAME\CMakeLists.txt"
+'@
 
+# Remplacement dynamique de la variable $PROJECT_NAME
+$CMakeContent = $CMakeContent -replace "\$\{PROJECT\}", $PROJECT
+
+# Écriture dans le fichier CMakeLists.txt
+$CMakeContent | Out-File -Encoding UTF8 -FilePath "$PROJECT\CMakeLists.txt"
 
 # Fin
-Write-Host "Template de projet C++ créé avec succès dans le dossier '$PROJECT_NAME'."
+Write-Host "Template de projet C++ créé avec succès dans le dossier '$PROJECT'."
 Write-Host "Pour commencer :"
-Write-Host "  cd $PROJECT_NAME\build"
+Write-Host "  cd $PROJECT\build"
 Write-Host "  cmake .."
 Write-Host "  cmake --build ."
 Write-Host "  copy compile_commands.json .."
