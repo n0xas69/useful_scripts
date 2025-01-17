@@ -39,12 +39,20 @@ file(GLOB SOURCES "src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# Ajout des lib externe
-#target_link_libraries(${PROJECT_NAME}
-#    PRIVATE
-#    ${CMAKE_SOURCE_DIR}/lib/Library1/libLibrary1.so
-#    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.so
-#)
+if(WIN32)
+  # Ajout des lib externe
+  #target_link_libraries(\${PROJECT_NAME}
+  #    PRIVATE
+  #    ${CMAKE_SOURCE_DIR}/lib/Library1/libLibrary1.dll
+  #    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.lib
+elseif(UNIX)
+  # Ajout des lib externe
+  #target_link_libraries(\${PROJECT_NAME}
+  #    PRIVATE
+  #    ${CMAKE_SOURCE_DIR}/lib/Library1/libLibrary1.so
+  #    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.a
+  #)
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../bin"
