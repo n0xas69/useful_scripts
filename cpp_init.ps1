@@ -23,19 +23,19 @@ int main() {
 
 # Création du fichier CMakeLists.txt
 Write-Host "Création du fichier CMakeLists.txt..."
-@"
+@'
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project($PROJECT_NAME)
+project(${PROJECT_NAME})
 
 # header
 include_directories(include)
 
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(\${PROJECT_NAME} \${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Ajout des lib externe
 #target_link_libraries(${PROJECT_NAME}
@@ -44,10 +44,11 @@ add_executable(\${PROJECT_NAME} \${SOURCES})
 #    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.so
 #)
 
-set_target_properties(\${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "\${CMAKE_BINARY_DIR}/../bin"
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../bin"
 )
-"@ | Set-Content -Path "$PROJECT_NAME\CMakeLists.txt"
+'@ | Out-File -Encoding UTF8 -FilePath "$PROJECT_NAME\CMakeLists.txt"
+
 
 # Fin
 Write-Host "Template de projet C++ créé avec succès dans le dossier '$PROJECT_NAME'."
