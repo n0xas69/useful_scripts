@@ -28,24 +28,23 @@ echo "Création du fichier CMakeLists.txt..."
 cat <<EOL > $PROJECT_NAME/CMakeLists.txt
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 project($PROJECT_NAME)
 
+# header
 include_directories(include)
 
 file(GLOB SOURCES "src/*.cpp")
 
-link_directories(
-    \${CMAKE_SOURCE_DIR}/lib/Library1
-    \${CMAKE_SOURCE_DIR}/lib/Library2
-)
-
-set(EXTERNAL_LIBRARIES "")
-
-# list(APPEND EXTERNAL_LIBRARIES Library1 Library2)
-
 add_executable(\${PROJECT_NAME} \${SOURCES})
 
-target_link_libraries(\${PROJECT_NAME} \${EXTERNAL_LIBRARIES})
+# Ajout des lib externe
+#target_link_libraries(${PROJECT_NAME}
+#    PRIVATE
+#    ${CMAKE_SOURCE_DIR}/lib/Library1/libLibrary1.so
+#    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.so
+#)
 
 set_target_properties(\${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "\${CMAKE_BINARY_DIR}/../bin"
@@ -58,3 +57,4 @@ echo "Pour commencer :"
 echo "  cd $PROJECT_NAME/build"
 echo "  cmake .."
 echo "  cmake --build ."
+echo "  cp compile_commands.json .."
