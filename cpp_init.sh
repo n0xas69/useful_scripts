@@ -40,7 +40,7 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(\${PROJECT_NAME} \${SOURCES})
 
 # Ajout des lib externe
-#target_link_libraries(${PROJECT_NAME}
+#target_link_libraries(\${PROJECT_NAME}
 #    PRIVATE
 #    ${CMAKE_SOURCE_DIR}/lib/Library1/libLibrary1.so
 #    ${CMAKE_SOURCE_DIR}/lib/Library2/libLibrary2.so
