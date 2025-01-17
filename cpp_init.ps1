@@ -65,6 +65,21 @@ $CMakeContent = $CMakeContent -replace "\$\{PROJECT\}", $PROJECT
 # Écriture dans le fichier CMakeLists.txt
 $CMakeContent | Out-File -Encoding UTF8 -FilePath "$PROJECT\CMakeLists.txt"
 
+# Création du gitignore
+@'
+# Fichiers de configuration IDE
+.vscode/
+.idea/
+
+# Fichiers de build
+/build/*
+/bin/*
+/CMakeFiles/
+/CMakeCache.txt
+Makefile
+cmake_install.cmake
+'@ | Set-Content -Path "$PROJECT\.gitignore"
+
 # Fin
 Write-Host "Template de projet C++ créé avec succès dans le dossier '$PROJECT'."
 Write-Host "Pour commencer :"
